@@ -1,0 +1,26 @@
+{
+  "name": "digitalagora",
+  "version": "1.0.0",
+  "type": "commonjs",
+  "description": "Decentralized governance for housing associations with AI and automated contractor management",
+  "scripts": {
+    "compile": "npx hardhat compile",
+    "test": "npx hardhat test",
+    "node": "npx hardhat node",
+    "deploy:local": "npx hardhat run scripts/deploy.cjs --network localhost",
+    "deploy:sepolia": "npx hardhat run scripts/deploy.cjs --network sepolia",
+    "backend": "cd backend && npm run start",
+    "frontend": "cd frontend && npm start",
+    "dev": "concurrently \"npm run node\" \"npm run backend\" \"npm run frontend\"",
+    "postinstall": "cd backend && npm install && cd ../frontend && npm install"
+  },
+  "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^4.0.0",
+    "concurrently": "^8.2.2",
+    "hardhat": "^2.28.6",
+    "solc": "^0.8.24"
+  },
+  "dependencies": {
+    "@openzeppelin/contracts": "^5.6.1"
+  }
+}
