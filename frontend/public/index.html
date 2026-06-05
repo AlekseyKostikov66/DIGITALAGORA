@@ -1,11 +1,147 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>DigitalAgora – Управление ТСЖ</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ЦИФРОВАЯ АГОРА - Народное самодержавие</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f0f2f5;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #1a3e60;
+        }
+        .thesis {
+            text-align: center;
+            font-size: 1.2rem;
+            margin: 20px 0;
+            padding: 15px;
+            background: #eef2ff;
+            border-radius: 8px;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 30px;
+        }
+        input, button {
+            padding: 12px;
+            font-size: 16px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+        button {
+            background-color: #1a3e60;
+            color: white;
+            cursor: pointer;
+            border: none;
+        }
+        button:hover {
+            background-color: #0f2b42;
+        }
+        .login-link {
+            text-align: center;
+            margin-top: 20px;
+        }
+        footer {
+            margin-top: 60px;
+            text-align: center;
+            font-size: 0.9rem;
+            color: #555;
+            border-top: 1px solid #ddd;
+            padding-top: 20px;
+        }
+        .message {
+            color: green;
+            text-align: center;
+        }
+        .error {
+            color: red;
+        }
+    </style>
 </head>
 <body>
-  <div id="root"></div>
+<div class="container" id="app">
+    <h1>ЦИФРОВАЯ АГОРА</h1>
+    <div class="thesis">
+        ЗАКОНОТВОРЧЕСКАЯ ДНЯТЕЛЬНОСТЬ 
+        <br>в режиме реального времени 24/7, 
+        <br>краеугольный камень НАРОДНОГО САМОДЕРЖАВИЯ.
+    </div>
+
+    <div id="unregistered" style="display: block;">
+        <form id="registerForm">
+            <h2>Регистрация акционера</h2>
+            <input type="text" id="name" placeholder="Ваше полное имя" required>
+            <input type="email" id="email" placeholder="Email" required>
+            <input type="password" id="password" placeholder="Пароль" required>
+            <input type="text" id="wallet" placeholder="Адрес кошелька (MetaMask) - опционально">
+            <button type="submit">Зарегистрироваться</button>
+        </form>
+        <div id="regMessage" class="message"></div>
+    </div>
+
+    <div id="registered" style="display: none; text-align: center;">
+        <p>✅ Вы уже зарегистрированы как акционер.</p>
+        <div class="login-link">
+            <button id="loginBtn">Войти в личный кабинет</button>
+        </div>
+    </div>
+
+    <footer>
+        <p>ГАО "ИИСУС ХРИСТОС" — Компромисс Добра со злом! И волки сыты, и овечки целы!</p>
+    </footer>
+</div>
+
+<script>
+    // Проверка, зарегистрирован ли пользователь
+    const user = localStorage.getItem('agora_user');
+    if (user) {
+        document.getElementById('unregistered').style.display = 'none';
+        document.getElementById('registered').style.display = 'block';
+    }
+
+    // Обработка регистрации
+    document.getElementById('registerForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const name = document.getElementById('name').value;
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+        const wallet = document.getElementById('wallet').value;
+
+        if (!name || !email || !password) {
+            document.getElementById('regMessage').innerText = 'Заполните все поля';
+            return;
+        }
+
+        const userData = { name, email, wallet };
+        localStorage.setItem('agora_user', JSON.stringify(userData));
+        document.getElementById('regMessage').innerText = 'Регистрация успешна! Теперь вы акционер.';
+        setTimeout(() => {
+            location.reload(); // показать кнопку входа
+        }, 1000);
+    });
+
+    // Обработка входа
+    document.getElementById('loginBtn')?.addEventListener('click', function() {
+        // Если есть страница login.html, перенаправить туда. Иначе показать форму входа на этой же.
+        window.location.href = '/login.html'; // или просто alert
+        // Для простоты можно просто показать форму входа:
+        // alert('Функция входа в разработке. Заглушка.');
+    });
+</script>
 </body>
 </html>

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Вход - ЦИФРОВАЯ АГОРА</title>
+    <style>
+        body { font-family: Arial; background: #f0f2f5; padding: 20px; }
+        .container { max-width: 400px; margin: 50px auto; background: white; padding: 30px; border-radius: 10px; }
+        input, button { width: 100%; padding: 10px; margin: 10px 0; }
+        button { background: #1a3e60; color: white; border: none; cursor: pointer; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2>Вход для акционеров</h2>
+    <form id="loginForm">
+        <input type="email" id="email" placeholder="Email" required>
+        <input type="password" id="password" placeholder="Пароль" required>
+        <button type="submit">Войти</button>
+    </form>
+    <div id="loginMessage"></div>
+    <p><a href="/">На главную</a></p>
+</div>
+<script>
+    document.getElementById('loginForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const email = document.getElementById('email').value;
+        const storedUser = localStorage.getItem('agora_user');
+        if (storedUser) {
+            const user = JSON.parse(storedUser);
+            if (user.email === email) {
+                alert('Добро пожаловать!');
+                // Перенаправление в личный кабинет (если есть)
+                window.location.href = '/dashboard.html';
+            } else {
+                document.getElementById('loginMessage').innerText = 'Неверный email';
+            }
+        } else {
+            document.getElementById('loginMessage').innerHTML = 'Пользователь не найден. <a href="/">Зарегистрируйтесь</a>';
+        }
+    });
+</script>
+</body>
+</html>
