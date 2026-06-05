@@ -2,146 +2,368 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ЦИФРОВАЯ АГОРА - Народное самодержавие</title>
+    <title>ЦИФРОВАЯ АГОРА</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background: #f0f2f5;
-            margin: 0;
-            padding: 20px;
-        }
-        .container {
-            max-width: 600px;
-            margin: 50px auto;
-            background: white;
-            border-radius: 10px;
-            padding: 30px;
-            box-shadow: 0 0 20px rgba(0,0,0,0.1);
-        }
-        h1 {
-            text-align: center;
-            color: #1a3e60;
-        }
-        .thesis {
-            text-align: center;
-            font-size: 1.2rem;
-            margin: 20px 0;
-            padding: 15px;
-            background: #eef2ff;
-            border-radius: 8px;
-        }
-        form {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            margin-top: 30px;
-        }
-        input, button {
-            padding: 12px;
-            font-size: 16px;
-            border-radius: 5px;
-            border: 1px solid #ccc;
-        }
-        button {
-            background-color: #1a3e60;
-            color: white;
-            cursor: pointer;
-            border: none;
-        }
-        button:hover {
-            background-color: #0f2b42;
-        }
-        .login-link {
-            text-align: center;
-            margin-top: 20px;
-        }
-        footer {
-            margin-top: 60px;
-            text-align: center;
-            font-size: 0.9rem;
-            color: #555;
-            border-top: 1px solid #ddd;
-            padding-top: 20px;
-        }
-        .message {
-            color: green;
-            text-align: center;
-        }
-        .error {
-            color: red;
-        }
+        * { box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f0f2f5; margin: 0; padding: 20px; }
+        .container { max-width: 500px; margin: 0 auto; background: white; padding: 30px; border-radius: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        h1, h2 { text-align: center; color: #1a3e60; }
+        .thesis { text-align: center; margin-bottom: 20px; background: #eef2ff; padding: 10px; border-radius: 12px; }
+        input, button { width: 100%; padding: 12px; margin-bottom: 12px; border: 1px solid #ccc; border-radius: 8px; }
+        button { background: #1a3e60; color: white; cursor: pointer; border: none; }
+        .message { text-align: center; margin-top: 10px; padding: 8px; border-radius: 8px; }
+        .success { background: #d4edda; color: #155724; }
+        .error { background: #f8d7da; color: #721c24; }
+        .nav { display: flex; gap: 10px; margin-bottom: 20px; }
+        .nav button { background: #6c757d; margin: 0; }
+        .nav button.active { background: #1a3e60; }
+        .page { display: none; }
+        .page.active { display: block; }
+        .proposal-card { border: 1px solid #ddd; padding: 12px; margin-bottom: 12px; border-radius: 12px; background: #fafafa; }
+        .vote-buttons { display: flex; gap: 10px; margin-top: 8px; }
+        .vote-for { background: #28a745; }
+        .vote-against { background: #dc3545; }
+        footer { text-align: center; margin-top: 30px; font-size: 0.8rem; color: #666; }
     </style>
 </head>
 <body>
-<div class="container" id="app">
-    <h1>ЦИФРОВАЯ АГОРА</h1>
-    <div class="thesis">
-        ЗАКОНОТВОРЧЕСКАЯ ДНЯТЕЛЬНОСТЬ 
-        <br>в режиме реального времени 24/7, 
-        <br>краеугольный камень НАРОДНОГО САМОДЕРЖАВИЯ.
-    </div>
-
-    <div id="unregistered" style="display: block;">
-        <form id="registerForm">
-            <h2>Регистрация акционера</h2>
-            <input type="text" id="name" placeholder="Ваше полное имя" required>
-            <input type="email" id="email" placeholder="Email" required>
-            <input type="password" id="password" placeholder="Пароль" required>
-            <input type="text" id="wallet" placeholder="Адрес кошелька (MetaMask) - опционально">
-            <button type="submit">Зарегистрироваться</button>
-        </form>
-        <div id="regMessage" class="message"></div>
-    </div>
-
-    <div id="registered" style="display: none; text-align: center;">
-        <p>✅ Вы уже зарегистрированы как акционер.</p>
-        <div class="login-link">
-            <button id="loginBtn">Войти в личный кабинет</button>
+<div id="unauthPanel">
+    <div class="container">
+        <h1>ЦИФРОВАЯ АГОРА</h1>
+        <div class="thesis">
+            ЦИФРОВАЯ АГОРА — платформа для Законотворческой Деятельности каждого человека 24/7,<br>
+            краеугольный камень <strong>НАРОДНОГО САМОДЕРЖАВИЯ</strong>.
         </div>
+        <div style="display: flex; gap: 10px;">
+            <button id="showRegBtn">Регистрация</button>
+            <button id="showLoginBtn">Вход</button>
+        </div>
+        <div id="regForm">
+            <h2>Регистрация акционера</h2>
+            <input type="text" id="regLastName" placeholder="Фамилия">
+            <input type="text" id="regFirstName" placeholder="Имя">
+            <input type="text" id="regPatronymic" placeholder="Отчество">
+            <input type="date" id="regBirthDate">
+            <input type="text" id="regResidence" placeholder="Место жительства">
+            <input type="text" id="regWallet" placeholder="Номер кошелька (обязательно)">
+            <input type="email" id="regEmail" placeholder="Email">
+            <input type="password" id="regPassword" placeholder="Пароль">
+            <button id="registerBtn">Зарегистрироваться</button>
+            <div id="regMessage" class="message"></div>
+        </div>
+        <div id="loginForm" style="display: none;">
+            <h2>Вход</h2>
+            <input type="email" id="loginEmail" placeholder="Email">
+            <input type="password" id="loginPassword" placeholder="Пароль">
+            <button id="loginBtn">Войти</button>
+            <div id="loginMessage" class="message"></div>
+        </div>
+        <footer>ГАО "ИИСУС ХРИСТОС" — Компромисс Добра со злом! И волки сыты, и овечки целы!</footer>
     </div>
+</div>
 
-    <footer>
-        <p>ГАО "ИИСУС ХРИСТОС" — Компромисс Добра со злом! И волки сыты, и овечки целы!</p>
-    </footer>
+<div id="authPanel" style="display: none;">
+    <div style="max-width: 1200px; margin: 0 auto;">
+        <div style="background: #1a3e60; color: white; padding: 10px 20px; display: flex; justify-content: space-between; align-items: center;">
+            <span style="font-size: 1.5rem;">ЦИФРОВАЯ АГОРА</span>
+            <div id="navMenu">
+                <button data-page="proposals">Предложения</button>
+                <button data-page="ai">ИИ-анализ</button>
+                <button data-page="contractors">Подрядчики</button>
+                <button data-page="profile">Профиль</button>
+            </div>
+            <div><span id="userNameDisplay"></span> <button id="logoutBtn" style="background:#dc3545; color:white; margin-left:10px;">Выйти</button></div>
+        </div>
+        <div id="page-proposals" class="page active">
+            <h2>📋 Предложения</h2>
+            <button id="createProposalBtn">➕ Создать</button>
+            <div id="proposalsList"></div>
+            <div id="createForm" style="display:none; border:1px solid #ccc; padding:15px; margin-top:15px;">
+                <input type="text" id="proposalTitle" placeholder="Название">
+                <textarea id="proposalDesc" rows="3" placeholder="Описание"></textarea>
+                <button id="submitProposal">Опубликовать</button>
+                <button id="cancelProposal">Отмена</button>
+            </div>
+        </div>
+        <div id="page-ai" class="page">
+            <h2>🤖 ИИ-анализ</h2>
+            <textarea id="aiIdea" rows="3" placeholder="Опишите идею..."></textarea>
+            <button id="analyzeBtn">Анализировать</button>
+            <div id="aiResult" style="background:#eef2ff; padding:15px; margin-top:15px; display:none;"></div>
+        </div>
+        <div id="page-contractors" class="page">
+            <h2>🔧 Подрядчики</h2>
+            <input type="text" id="contractorSearch" placeholder="Поиск...">
+            <button id="searchContractors">Найти</button>
+            <div id="contractorsList"></div>
+        </div>
+        <div id="page-profile" class="page">
+            <h2>👤 Профиль</h2>
+            <div id="profileInfo"></div>
+            <div class="balance">💰 Баланс токенов: <span id="tokenBalance">1000</span> AGT</div>
+            <button id="refreshBalance">Обновить</button>
+        </div>
+        <footer>ГАО "ИИСУС ХРИСТОС" — Компромисс Добра со злом! И волки сыты, и овечки целы!</footer>
+    </div>
 </div>
 
 <script>
-    // Проверка, зарегистрирован ли пользователь
-    const user = localStorage.getItem('agora_user');
-    if (user) {
-        document.getElementById('unregistered').style.display = 'none';
-        document.getElementById('registered').style.display = 'block';
+    const API_BASE = 'http://localhost:5000/api';
+    let currentUser = null;
+    let proposals = [];
+
+    // --- helper functions ---
+    function escapeHtml(str) {
+        if (!str) return '';
+        return str.replace(/[&<>]/g, function(m) {
+            if (m === '&') return '&amp;';
+            if (m === '<') return '&lt;';
+            if (m === '>') return '&gt;';
+            return m;
+        });
     }
 
-    // Обработка регистрации
-    document.getElementById('registerForm').addEventListener('submit', function(e) {
-        e.preventDefault();
-        const name = document.getElementById('name').value;
-        const email = document.getElementById('email').value;
-        const password = document.getElementById('password').value;
-        const wallet = document.getElementById('wallet').value;
-
-        if (!name || !email || !password) {
-            document.getElementById('regMessage').innerText = 'Заполните все поля';
+    // --- proposals logic ---
+    function loadProposals() {
+        const stored = localStorage.getItem('agora_proposals');
+        if (stored) {
+            proposals = JSON.parse(stored);
+        } else {
+            proposals = [
+                { id: 1, title: 'Установка видеонаблюдения', description: 'Безопасность', votesFor: 12, votesAgainst: 3, author: 'Иванов', date: '2025-06-01' },
+                { id: 2, title: 'Ремонт подъездов', description: 'Покраска', votesFor: 25, votesAgainst: 2, author: 'Петрова', date: '2025-06-02' }
+            ];
+        }
+        renderProposals();
+    }
+    function saveProposals() {
+        localStorage.setItem('agora_proposals', JSON.stringify(proposals));
+    }
+    function renderProposals() {
+        const container = document.getElementById('proposalsList');
+        if (!container) return;
+        if (proposals.length === 0) {
+            container.innerHTML = '<p>Нет предложений. Создайте первое!</p>';
             return;
         }
+        container.innerHTML = proposals.map(p => `
+            <div class="proposal-card">
+                <div class="proposal-title"><strong>${escapeHtml(p.title)}</strong></div>
+                <div>Автор: ${escapeHtml(p.author)} | Дата: ${p.date}</div>
+                <div>За: ${p.votesFor} | Против: ${p.votesAgainst}</div>
+                <div class="vote-buttons">
+                    <button class="vote-for" data-id="${p.id}" data-vote="for">✅ За</button>
+                    <button class="vote-against" data-id="${p.id}" data-vote="against">❌ Против</button>
+                </div>
+            </div>
+        `).join('');
+        document.querySelectorAll('.vote-for, .vote-against').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const id = parseInt(btn.dataset.id);
+                const prop = proposals.find(p => p.id === id);
+                if (prop) {
+                    if (btn.dataset.vote === 'for') prop.votesFor++;
+                    else prop.votesAgainst++;
+                    saveProposals();
+                    renderProposals();
+                }
+            });
+        });
+    }
+    // create proposal UI
+    document.getElementById('createProposalBtn')?.addEventListener('click', () => {
+        document.getElementById('createForm').style.display = 'block';
+    });
+    document.getElementById('cancelProposal')?.addEventListener('click', () => {
+        document.getElementById('createForm').style.display = 'none';
+        document.getElementById('proposalTitle').value = '';
+        document.getElementById('proposalDesc').value = '';
+    });
+    document.getElementById('submitProposal')?.addEventListener('click', () => {
+        const title = document.getElementById('proposalTitle').value.trim();
+        const desc = document.getElementById('proposalDesc').value.trim();
+        if (!title || !desc) { alert('Заполните название и описание'); return; }
+        const newId = Date.now();
+        proposals.unshift({
+            id: newId,
+            title: title,
+            description: desc,
+            votesFor: 0,
+            votesAgainst: 0,
+            author: currentUser ? `${currentUser.lastName} ${currentUser.firstName}` : 'Акционер',
+            date: new Date().toISOString().slice(0,10)
+        });
+        saveProposals();
+        renderProposals();
+        document.getElementById('createForm').style.display = 'none';
+        document.getElementById('proposalTitle').value = '';
+        document.getElementById('proposalDesc').value = '';
+        showPage('proposals');
+    });
 
-        const userData = { name, email, wallet };
-        localStorage.setItem('agora_user', JSON.stringify(userData));
-        document.getElementById('regMessage').innerText = 'Регистрация успешна! Теперь вы акционер.';
+    // AI (demo)
+    document.getElementById('analyzeBtn')?.addEventListener('click', () => {
+        const idea = document.getElementById('aiIdea').value.trim();
+        const resultDiv = document.getElementById('aiResult');
+        if (!idea) { alert('Введите идею'); return; }
+        resultDiv.style.display = 'block';
+        resultDiv.innerHTML = '🤔 Анализируем...';
         setTimeout(() => {
-            location.reload(); // показать кнопку входа
-        }, 1000);
+            resultDiv.innerHTML = '<strong>Результат ИИ-анализа:</strong><br>✅ Эффективность: 78%<br>💰 Стоимость: ~150 000 руб.<br>⏱ Срок: 3 месяца';
+        }, 1500);
     });
 
-    // Обработка входа
-    document.getElementById('loginBtn')?.addEventListener('click', function() {
-        // Если есть страница login.html, перенаправить туда. Иначе показать форму входа на этой же.
-        window.location.href = '/login.html'; // или просто alert
-        // Для простоты можно просто показать форму входа:
-        // alert('Функция входа в разработке. Заглушка.');
+    // Contractors (demo)
+    document.getElementById('searchContractors')?.addEventListener('click', () => {
+        const query = document.getElementById('contractorSearch').value.toLowerCase();
+        const demo = [
+            { name: 'ООО "СтройКом"', spec: 'ремонт, электрика', rating: 4.8, contacts: 'stroi@ex.com' },
+            { name: 'ИП Иванов', spec: 'сантехника', rating: 4.5, contacts: 'ivanov@ex.com' },
+            { name: 'ЧОП "Безопасный дом"', spec: 'видеонаблюдение', rating: 4.9, contacts: 'security@ex.com' }
+        ];
+        const filtered = query ? demo.filter(c => c.spec.includes(query) || c.name.toLowerCase().includes(query)) : demo;
+        const container = document.getElementById('contractorsList');
+        if (filtered.length === 0) { container.innerHTML = '<p>Ничего не найдено</p>'; return; }
+        container.innerHTML = filtered.map(c => `
+            <div class="proposal-card">
+                <strong>${escapeHtml(c.name)}</strong><br>
+                Специализация: ${escapeHtml(c.spec)}<br>
+                ⭐ Рейтинг: ${c.rating}<br>
+                📧 ${escapeHtml(c.contacts)}<br>
+                <button class="secondary" onclick="alert('Связь с подрядчиком в разработке')">Связаться</button>
+            </div>
+        `).join('');
     });
+
+    // Profile
+    function renderProfile() {
+        if (!currentUser) return;
+        const info = document.getElementById('profileInfo');
+        info.innerHTML = `
+            <p><strong>Фамилия:</strong> ${escapeHtml(currentUser.lastName)}</p>
+            <p><strong>Имя:</strong> ${escapeHtml(currentUser.firstName)}</p>
+            <p><strong>Отчество:</strong> ${escapeHtml(currentUser.patronymic || '')}</p>
+            <p><strong>Дата рождения:</strong> ${new Date(currentUser.birthDate).toLocaleDateString()}</p>
+            <p><strong>Место жительства:</strong> ${escapeHtml(currentUser.residence)}</p>
+            <p><strong>Номер кошелька:</strong> ${escapeHtml(currentUser.walletAddress)}</p>
+            <p><strong>Email:</strong> ${escapeHtml(currentUser.email)}</p>
+        `;
+        let balance = localStorage.getItem('agora_balance');
+        if (!balance) balance = '1000';
+        document.getElementById('tokenBalance').innerText = balance;
+    }
+    document.getElementById('refreshBalance')?.addEventListener('click', () => {
+        const newBalance = Math.floor(Math.random() * 2000 + 500);
+        localStorage.setItem('agora_balance', newBalance);
+        document.getElementById('tokenBalance').innerText = newBalance;
+    });
+
+    // navigation
+    function showPage(pageId) {
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        document.getElementById(`page-${pageId}`).classList.add('active');
+        document.querySelectorAll('#navMenu button').forEach(btn => {
+            if (btn.dataset.page === pageId) btn.classList.add('active');
+            else btn.classList.remove('active');
+        });
+        if (pageId === 'profile') renderProfile();
+        if (pageId === 'proposals') renderProposals();
+    }
+    document.querySelectorAll('#navMenu button').forEach(btn => {
+        btn.addEventListener('click', () => showPage(btn.dataset.page));
+    });
+
+    // auth state
+    function showAuthPanel(user) {
+        currentUser = user;
+        document.getElementById('unauthPanel').style.display = 'none';
+        document.getElementById('authPanel').style.display = 'block';
+        document.getElementById('userNameDisplay').innerText = `${user.lastName} ${user.firstName}`;
+        loadProposals();
+        renderProfile();
+        showPage('proposals');
+    }
+    function showUnauthPanel() {
+        document.getElementById('unauthPanel').style.display = 'block';
+        document.getElementById('authPanel').style.display = 'none';
+        localStorage.removeItem('token');
+        localStorage.removeItem('agora_user');
+    }
+    function checkAuth() {
+        const token = localStorage.getItem('token');
+        const savedUser = localStorage.getItem('agora_user');
+        if (token && savedUser) {
+            try {
+                const user = JSON.parse(savedUser);
+                showAuthPanel(user);
+            } catch(e) { showUnauthPanel(); }
+        } else {
+            showUnauthPanel();
+        }
+    }
+
+    // register / login handlers
+    document.getElementById('showRegBtn').addEventListener('click', () => {
+        document.getElementById('regForm').style.display = 'block';
+        document.getElementById('loginForm').style.display = 'none';
+    });
+    document.getElementById('showLoginBtn').addEventListener('click', () => {
+        document.getElementById('loginForm').style.display = 'block';
+        document.getElementById('regForm').style.display = 'none';
+    });
+    document.getElementById('registerBtn').addEventListener('click', async () => {
+        const lastName = document.getElementById('regLastName').value.trim();
+        const firstName = document.getElementById('regFirstName').value.trim();
+        const patronymic = document.getElementById('regPatronymic').value.trim();
+        const birthDate = document.getElementById('regBirthDate').value;
+        const residence = document.getElementById('regResidence').value.trim();
+        const walletAddress = document.getElementById('regWallet').value.trim();
+        const email = document.getElementById('regEmail').value.trim();
+        const password = document.getElementById('regPassword').value;
+        const msg = document.getElementById('regMessage');
+        if (!lastName || !firstName || !birthDate || !residence || !walletAddress || !email || !password) {
+            msg.innerHTML = 'Заполните все поля'; msg.className = 'message error'; return;
+        }
+        try {
+            const res = await fetch(API_BASE + '/auth/register', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ lastName, firstName, patronymic, birthDate, residence, walletAddress, email, password })
+            });
+            const data = await res.json();
+            if (!res.ok) throw new Error(data.message);
+            localStorage.setItem('token', data.token);
+            localStorage.setItem('agora_user', JSON.stringify(data.user));
+            showAuthPanel(data.user);
+        } catch (err) {
+            msg.innerHTML = err.message; msg.className = 'message error';
+        }
+    });
+    document.getElementById('loginBtn').addEventListener('click', async () => {
+        const email = document.getElementById('loginEmail').value.trim();
+        const password = document.getElementById('loginPassword').value;
+        const msg = document.getElementById('loginMessage');
+        if (!email || !password) { msg.innerHTML = 'Введите email и пароль'; msg.className = 'message error'; return; }
+        try {
+            const res = await fetch(API_BASE + '/auth/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, password })
+            });
+            const data = await res.json();
+            if (!res.ok) throw new Error(data.message);
+            localStorage.setItem('token', data.token);
+            localStorage.setItem('agora_user', JSON.stringify(data.user));
+            showAuthPanel(data.user);
+        } catch (err) {
+            msg.innerHTML = err.message; msg.className = 'message error';
+        }
+    });
+    document.getElementById('logoutBtn').addEventListener('click', () => {
+        showUnauthPanel();
+    });
+
+    checkAuth();
 </script>
 </body>
 </html>

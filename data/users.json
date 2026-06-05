@@ -1,0 +1,35 @@
+[
+  {
+    "id": 1780663225498,
+    "lastName": "Костиков",
+    "firstName": "Алексей",
+    "patronymic": "Борисович",
+    "birthDate": "1966-08-17T00:00:00.000Z",
+    "residence": "г. Ростов-на-Дону, ул. Подгорная 22",
+    "walletAddress": "0x05d017242439229AC9776e2CA3C107d4563A5979",
+    "email": "abkostikov@yandex.ru",
+    "password": "$2b$10$34zpNCBSdvyGNT716rSJoe9W0P7dIJW05c1N2UW2HNfhYIJjXUh1."
+  },
+  {
+    "id": 1780676436285,
+    "lastName": "Иванов",
+    "firstName": "Иван",
+    "patronymic": "Иванович",
+    "birthDate": "1985-12-20T00:00:00.000Z",
+    "residence": "г. Москва, пр. Коммунаров 45",
+    "walletAddress": "0x05d017242439229AC9776e2CA3C107d4563A2584",
+    "email": "ivanov@yandex.ru",
+    "password": "$2b$10$lE3wInoTdYvWUMxR1PIc.equG/hSgHyMUPILG2tCphpvpjPOsFrMe"
+  },
+  {
+    "id": 1780676443407,
+    "lastName": "Иванов",
+    "firstName": "Иван",
+    "patronymic": "Иванович",
+    "birthDate": "1985-12-20T00:00:00.000Z",
+    "residence": "г. Москва, пр. Коммунаров 45",
+    "walletAddress": "0x05d017242439229AC9776e2CA3C107d4563A2584",
+    "email": "ivanov@yandex.ru",
+    "password": "$2b$10$nWt.D7R2gZYpqJrFKi8a5u9mqaCm7KDqXQHX6rwYQO6stjJliCGoa"
+  }
+]

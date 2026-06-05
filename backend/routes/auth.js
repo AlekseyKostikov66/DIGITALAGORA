@@ -1,26 +1,28 @@
 const express = require('express');
+const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const User = require('../models/UserFileModel');
 
 const router = express.Router();
+const SALT_ROUNDS = 10;
 
 // Регистрация
 router.post('/register', async (req, res) => {
   try {
     const { lastName, firstName, patronymic, birthDate, residence, walletAddress, email, password } = req.body;
 
-    // Проверка обязательных полей
     if (!lastName || !firstName || !birthDate || !residence || !walletAddress || !email || !password) {
       return res.status(400).json({ message: 'Заполните все обязательные поля' });
     }
 
-    // Проверка уникальности email
     const existing = await User.findOne({ email });
     if (existing) {
       return res.status(400).json({ message: 'Пользователь с таким email уже существует' });
     }
 
-    // Сохраняем пользователя (пароль в открытом виде — только для разработки)
+    // Хешируем пароль
+    const hashedPassword = await bcrypt.hash(password, SALT_ROUNDS);
+
     const newUser = await User.save({
       lastName,
       firstName,
@@ -29,10 +31,9 @@ router.post('/register', async (req, res) => {
       residence,
       walletAddress,
       email,
-      password, // ВНИМАНИЕ: для продакшена нужно хешировать!
+      password: hashedPassword,   // сохраняем хеш
     });
 
-    // Генерация JWT
     const token = jwt.sign(
       { id: newUser.id, email: newUser.email, lastName: newUser.lastName, firstName: newUser.firstName },
       process.env.JWT_SECRET,
@@ -69,8 +70,9 @@ router.post('/login', async (req, res) => {
       return res.status(401).json({ message: 'Неверный email или пароль' });
     }
 
-    // Прямое сравнение паролей (без хеширования, только для разработки)
-    if (user.password !== password) {
+    // Сравниваем введённый пароль с хешем из базы
+    const valid = await bcrypt.compare(password, user.password);
+    if (!valid) {
       return res.status(401).json({ message: 'Неверный email или пароль' });
     }
 
